@@ -44,7 +44,7 @@ export default function SignupPage() {
 
     setSubmitting(true);
     try {
-      await apiClient.post("/api/auth/signup", result.data);
+      await apiClient.post("/api/auth/signup", result.data, { skipAuthRedirect: true });
       router.push("/verify-email");
     } catch (err) {
       setError(

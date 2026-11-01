@@ -27,7 +27,7 @@ function LoginForm() {
 
     setSubmitting(true);
     try {
-      await apiClient.post("/api/auth/login", result.data);
+      await apiClient.post("/api/auth/login", result.data, { skipAuthRedirect: true });
       const redirect = searchParams.get("redirect");
       router.push(redirect && redirect.startsWith("/") ? redirect : "/app");
       router.refresh();

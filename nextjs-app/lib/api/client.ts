@@ -17,7 +17,18 @@ interface ApiErrorBody {
   details?: unknown;
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+interface RequestOptions {
+  // Set for pre-session endpoints (login/signup) where a 401 means "these
+  // credentials are wrong," not "your session expired" — the global
+  // redirect-to-login behavior below only makes sense for the latter.
+  skipAuthRedirect?: boolean;
+}
+
+async function request<T>(
+  path: string,
+  init?: RequestInit,
+  options?: RequestOptions
+): Promise<T> {
   const isFormData = init?.body instanceof FormData;
 
   const response = await fetch(path, {
@@ -29,7 +40,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     },
   });
 
-  if (response.status === 401) {
+  if (response.status === 401 && !options?.skipAuthRedirect) {
     if (typeof window !== "undefined") {
       const redirect = encodeURIComponent(window.location.pathname);
       window.location.href = `/login?redirect=${redirect}`;
@@ -56,16 +67,20 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const apiClient = {
   get: <T>(path: string) => request<T>(path),
-  post: <T>(path: string, body?: unknown) =>
-    request<T>(path, {
-      method: "POST",
-      body:
-        body instanceof FormData
-          ? body
-          : body !== undefined
-            ? JSON.stringify(body)
-            : undefined,
-    }),
+  post: <T>(path: string, body?: unknown, options?: RequestOptions) =>
+    request<T>(
+      path,
+      {
+        method: "POST",
+        body:
+          body instanceof FormData
+            ? body
+            : body !== undefined
+              ? JSON.stringify(body)
+              : undefined,
+      },
+      options
+    ),
   patch: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: "PATCH", body: JSON.stringify(body) }),
 };
