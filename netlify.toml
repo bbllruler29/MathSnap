@@ -21,10 +21,18 @@
   # legitimate server-only secrets — never imported into any client
   # component, never NEXT_PUBLIC_-prefixed — so omit by key name instead of
   # playing whack-a-mole with every internal log/cache path that happens to
-  # reference them. ANTHROPIC_MODEL isn't actually sensitive (just a model
-  # id string) but is included since the scanner flagged it alongside the
-  # real key.
-  SECRETS_SCAN_OMIT_KEYS = "ANTHROPIC_API_KEY,ANTHROPIC_MODEL,SUPABASE_SERVICE_ROLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,SYMPY_VERIFY_SERVICE_TOKEN,UPSTASH_REDIS_REST_TOKEN"
+  # reference them. ANTHROPIC_MODEL, SOLVE_CONFIDENCE_THRESHOLD,
+  # DAILY_FREE_SOLVE_LIMIT, and MAX_CHAT_HISTORY aren't actually sensitive
+  # (a model id string and plain tuning numbers) but Netlify's scanner
+  # flags any configured env var whose value appears in build output,
+  # regardless of sensitivity.
+  #
+  # NOTE: as of 2026-10-31, setting this in netlify.toml alone did not
+  # reliably take effect — it had to also be set as an actual Netlify
+  # dashboard environment variable (Site configuration > Environment
+  # variables) for the scanner to honor it. Kept here for documentation/
+  # fallback, but the dashboard value is the one that's load-bearing.
+  SECRETS_SCAN_OMIT_KEYS = "ANTHROPIC_API_KEY,ANTHROPIC_MODEL,SUPABASE_SERVICE_ROLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,SYMPY_VERIFY_SERVICE_TOKEN,UPSTASH_REDIS_REST_TOKEN,SOLVE_CONFIDENCE_THRESHOLD,DAILY_FREE_SOLVE_LIMIT,MAX_CHAT_HISTORY"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
