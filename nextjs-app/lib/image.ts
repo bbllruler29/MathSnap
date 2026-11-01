@@ -22,7 +22,20 @@ function getImageDimensions(file: File): Promise<{ width: number; height: number
  * Returns the original file unchanged if it's already within bounds.
  */
 export async function resizeImageIfNeeded(file: File): Promise<File> {
-  const { width, height } = await getImageDimensions(file);
+  let width: number;
+  let height: number;
+  try {
+    ({ width, height } = await getImageDimensions(file));
+  } catch {
+    // Browser couldn't decode this file at all (most commonly a HEIC photo
+    // straight off an iPhone camera — <img>/canvas can't render those in
+    // most browsers). Skip client-side resizing and send it through as-is;
+    // the server's validateImageUpload() will reject it with a clear,
+    // actionable message if it's genuinely unsupported, instead of this
+    // failing silently with no feedback at all.
+    return file;
+  }
+
   if (width <= MAX_EDGE && height <= MAX_EDGE) {
     return file;
   }
