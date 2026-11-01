@@ -5,6 +5,12 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Next.js's internal webpack build cache can retain traces of server-only
+  # env vars (ANTHROPIC_API_KEY, Supabase credentials, etc.) that are
+  # legitimately read via process.env in server code. This cache is never
+  # served to visitors, so it's excluded from secret scanning rather than
+  # disabling the scan entirely.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
