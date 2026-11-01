@@ -14,6 +14,15 @@
   # at after the Next.js runtime plugin stages the deploy output under
   # .netlify/ — Netlify's scanner reported the latter.
   SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,.netlify/.next/cache/**"
+  # Path-based exclusion above keeps getting out-scanned by new locations
+  # (webpack cache, then the resolved-config log section). These are all
+  # legitimate server-only secrets — never imported into any client
+  # component, never NEXT_PUBLIC_-prefixed — so omit by key name instead of
+  # playing whack-a-mole with every internal log/cache path that happens to
+  # reference them. ANTHROPIC_MODEL isn't actually sensitive (just a model
+  # id string) but is included since the scanner flagged it alongside the
+  # real key.
+  SECRETS_SCAN_OMIT_KEYS = "ANTHROPIC_API_KEY,ANTHROPIC_MODEL,SUPABASE_SERVICE_ROLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,SYMPY_VERIFY_SERVICE_TOKEN,UPSTASH_REDIS_REST_TOKEN"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
