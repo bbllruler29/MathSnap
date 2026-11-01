@@ -10,7 +10,10 @@
   # legitimately read via process.env in server code. This cache is never
   # served to visitors, so it's excluded from secret scanning rather than
   # disabling the scan entirely.
-  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**"
+  # Covers both the raw build-time cache location and the path it ends up
+  # at after the Next.js runtime plugin stages the deploy output under
+  # .netlify/ — Netlify's scanner reported the latter.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,.netlify/.next/cache/**"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
