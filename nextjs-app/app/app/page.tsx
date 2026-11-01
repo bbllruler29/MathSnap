@@ -51,6 +51,7 @@ export default function CapturePage() {
         setStatus("error");
         return;
       }
+      console.error("Solve request failed before reaching the server:", err);
       setErrorMessage("Something went wrong. Please try again.");
       setStatus("error");
     }
