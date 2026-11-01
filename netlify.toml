@@ -13,7 +13,9 @@
   # Covers both the raw build-time cache location and the path it ends up
   # at after the Next.js runtime plugin stages the deploy output under
   # .netlify/ — Netlify's scanner reported the latter.
-  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,.netlify/.next/cache/**"
+  # Paths are relative to the REPO ROOT, not the `base` directory above —
+  # since our app lives under nextjs-app/, the cache paths need that prefix.
+  SECRETS_SCAN_OMIT_PATHS = "nextjs-app/.next/cache/**,nextjs-app/.netlify/.next/cache/**,.next/cache/**,.netlify/.next/cache/**"
   # Path-based exclusion above keeps getting out-scanned by new locations
   # (webpack cache, then the resolved-config log section). These are all
   # legitimate server-only secrets — never imported into any client
