@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-image: linear-gradient(
+        to right,
+        rgba(215, 222, 232, 0.6) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(215, 222, 232, 0.6) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  :focus-visible {
+    outline: 2px solid #0e7c7b;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-[10px] bg-highlighter text-ink font-display font-bold px-6 py-3 transition-transform duration-150 ease-out disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: scale(1.03);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-[10px] bg-study-teal text-paper font-display font-bold px-6 py-3 transition-transform duration-150 ease-out disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-secondary:hover:not(:disabled) {
+    transform: scale(1.03);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-[10px] border border-grid-line text-ink font-display font-semibold px-6 py-3 transition-colors duration-150 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    border-color: #0e7c7b;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-grid-line bg-paper px-4 py-3 font-body text-ink placeholder:text-ink/40 focus:border-study-teal transition-colors;
+  }
+
+  .card {
+    @apply rounded-xl border border-grid-line bg-white/60;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-widest text-study-teal;
+  }
+
+  .boxed-answer {
+    @apply relative inline-block px-1;
+  }
+
+  .step-row {
+    @apply relative flex gap-4 pb-8;
+  }
+  .step-row:not(:last-child)::before {
+    content: "";
+    @apply absolute left-[15px] top-8 bottom-0 w-[2px] bg-grid-line;
+  }
+
+  .step-badge {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-study-teal font-display text-sm font-bold text-paper;
+  }
+  .step-badge-final {
+    @apply bg-highlighter text-ink;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide;
+  }
+  .badge-warning {
+    @apply badge bg-red-pen/10 text-red-pen;
+  }
+  .badge-neutral {
+    @apply badge bg-grid-line/60 text-ink/60;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-step {
+    opacity: 0;
+    animation: reveal 0.5s ease-out both;
+  }
+  .reveal-step:nth-of-type(1) {
+    animation-delay: 0.1s;
+  }
+  .reveal-step:nth-of-type(2) {
+    animation-delay: 0.5s;
+  }
+  .reveal-step:nth-of-type(3) {
+    animation-delay: 0.9s;
+  }
+  .reveal-box {
+    opacity: 0;
+    animation: draw-box 0.4s ease-out both;
+    animation-delay: 1.3s;
+  }
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out both;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes draw-box {
+  from {
+    opacity: 0;
+    transform: scale(0.9) rotate(-0.6deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(-0.6deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.typing-dot {
+  animation: pulse-dot 1.2s infinite;
+}
